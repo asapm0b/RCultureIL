@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T-Shirts | R CULTURE IL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#fff;--ink:#0a0a0a;--muted:#6b6b6b;--line:#e8e8e8;
+  --display:'Anton','Impact','Arial Narrow',sans-serif;
+  --body:'Inter',system-ui,-apple-system,'Segoe UI',Arial,sans-serif}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body)}
+a{color:inherit;text-decoration:none}
+img{display:block}
+
+.ticker{background:var(--ink);color:#fff;font-size:12px;letter-spacing:.12em;text-transform:uppercase;overflow:hidden;white-space:nowrap;padding:9px 0}
+.ticker span{display:inline-block;padding-left:100%;animation:scroll 22s linear infinite}
+@keyframes scroll{to{transform:translateX(-100%)}}
+
+header{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{max-width:1200px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.left,.right{display:flex;align-items:center;gap:16px}
+.logo{font-family:var(--display);font-size:22px;letter-spacing:.06em;white-space:nowrap}
+nav{display:flex;gap:28px;font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+nav a{position:relative;padding:4px 0}
+nav a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--ink);transition:width .25s}
+nav a:hover::after,nav a.on::after{width:100%}
+.cart{font-size:13px;font-weight:600;letter-spacing:.08em}
+
+.search{display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--ink);padding:3px 0;width:130px;transition:width .25s}
+.search:focus-within{width:180px}
+.search input{border:0;outline:0;background:transparent;font:inherit;font-size:12px;letter-spacing:.06em;width:100%;color:var(--ink);padding:0}
+.search input::placeholder{color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.search button{border:0;background:none;padding:0;cursor:pointer;display:flex;color:var(--ink)}
+.search svg,.cart-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+.cart-btn{position:relative;display:flex;align-items:center;justify-content:center;width:36px;height:36px;border:1.5px solid var(--ink);transition:background .25s,color .25s}
+.cart-btn:hover{background:var(--ink);color:#fff}
+.cart-btn svg{width:18px;height:18px}
+.cart-count{position:absolute;top:-7px;right:-7px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--ink);color:#fff;border:1.5px solid #fff;font-size:10px;font-weight:600;line-height:14px;text-align:center}
+
+/* page title */
+.title{max-width:1200px;margin:0 auto;padding:64px 24px 8px;display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.title h1{font-family:var(--display);font-weight:400;font-size:clamp(44px,8vw,96px);line-height:.95;letter-spacing:.02em;text-transform:uppercase;margin:0}
+.title h1 em{font-family:var(--body);font-style:normal;font-size:.3em;color:var(--muted);letter-spacing:.05em;margin-left:12px}
+.title p{margin:0;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+/* products */
+.products{max-width:1200px;margin:0 auto;padding:32px 24px 96px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px 16px}
+.card{display:flex;flex-direction:column}
+.pic{position:relative;aspect-ratio:1/1;background:#f2f2f2;overflow:hidden}
+.pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.card:hover .pic img{transform:scale(1.06)}
+.pic .no{position:absolute;top:12px;left:14px;font-size:11px;letter-spacing:.12em;color:var(--muted);font-weight:600}
+.info{display:flex;justify-content:space-between;gap:12px;margin-top:12px;font-size:14px}
+.info b{font-weight:600}
+.info .pr{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.pr s{color:var(--muted);font-size:12px;font-weight:400}
+.pr b{font-weight:600}
+.pr .up{width:16px;height:16px;fill:none;stroke:#16a34a;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.pic .sale{position:absolute;top:10px;right:10px;background:#16a34a;color:#fff;font-size:10px;font-weight:600;letter-spacing:.12em;padding:4px 8px;text-transform:uppercase}
+.buy{display:flex;gap:6px;margin-top:8px}
+
+.size{flex:0 0 54px;height:32px;padding:0 4px;border:1.5px solid var(--ink);background:#fff;color:var(--ink);font:inherit;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:0}
+.size.err{border-color:#dc2626;color:#dc2626}
+.add{flex:1;height:32px;padding:0;border:1.5px solid var(--ink);background:transparent;color:var(--ink);font:inherit;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:background .25s,color .25s}
+.add:hover,.add:focus-visible{background:var(--ink);color:#fff}
+.add.done{background:var(--ink);color:#fff}
+.empty{display:none;text-align:center;color:var(--muted);padding:64px 0;font-size:14px}
+
+footer{border-top:1px solid var(--line);padding:56px 24px 40px}
+.foot{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;gap:32px}
+.foot .logo{font-size:26px}
+.foot p{color:var(--muted);font-size:13px;margin:10px 0 0}
+.links{display:flex;gap:28px;flex-wrap:wrap;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.links a:hover{text-decoration:underline}
+.copy{max-width:1200px;margin:40px auto 0;font-size:12px;color:var(--muted)}
+
+@media(max-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){
+  nav{display:none}
+  .bar{padding:12px 16px;gap:10px}
+  .left,.right{gap:10px}
+  .logo{font-size:18px}
+  .search,.search:focus-within{width:90px}
+  .title{padding:40px 20px 8px}
+  .products{padding:24px 20px 64px}
+  .grid{gap:22px 12px}
+  .info{font-size:13px}
+}
+</style>
+</head>
+<body>
+
+<div class="ticker"><span>Free Shipping Over ₪350 &nbsp;·&nbsp; New Drops Weekly &nbsp;·&nbsp; Best Quality &nbsp;·&nbsp; Israel's #1 Streetwear</span></div>
+
+<header>
+  <div class="bar">
+    <div class="left">
+      <a class="logo" href="index.html">R CULTURE IL</a>
+      <form class="search" id="searchForm" role="search">
+        <input type="search" id="q" placeholder="Search" aria-label="Search">
+        <button type="submit" aria-label="Search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        </button>
+      </form>
+    </div>
+    <nav>
+      <a href="index.html#shop">Shop</a>
+      <a href="COL.html">Collection</a>
+      <a href="A.html">About</a>
+      <a href="SH.html">Shipping</a>
+    </nav>
+    <div class="right">
+      <a class="cart" href="log.html">LOGIN</a>
+      <a class="cart-btn" href="cart.html" aria-label="Cart">
+        <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<section class="title">
+  <h1>T-Shirts<em>חולצות</em></h1>
+  <p><span id="total">34</span> items · <s>₪105</s> ₪90 each</p>
+</section>
+
+<!-- IMAGES: put each photo in img/tees/ named by its number, e.g. img/tees/63.png (800 x 800 px) -->
+<section class="products">
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty">No T-shirts match your search.</div>
+</section>
+
+<footer>
+  <div class="foot">
+    <div>
+      <div class="logo">R CULTURE IL</div>
+      <p>Sneakers &amp; Streetwear · Israel</p>
+    </div>
+    <div class="links">
+      <a href="COL.html">Collection</a>
+      <a href="SH.html">Shipping</a>
+      <a href="A.html">About</a>
+      <a href="https://www.instagram.com/rcultureil/" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </div>
+  <div class="copy">R Culture IL® 2026</div>
+</footer>
+
+<script>
+const PRICE = 90;
+const OLD_PRICE = 105;
+const SIZES = ['S','M','L','XL','XXL'];
+const IMG_EXT = 'png'; // change to jpg / webp if needed
+const TEES = [
+  [63,'Ralph Lauren Tee'],[64,'Corteiz Tee'],[65,'Cortiez Tee'],[66,'Cortiez Tee'],
+  [67,'Cortiez Tee'],[68,'Essentials Tee'],[69,'Represent Tee'],[70,'Stone Island Tee'],
+  [71,'HellStar Tee'],[72,'BAPE Tee'],[73,'Balenciaga Tee'],[74,'Balenciaga 2 Tee'],
+  [75,'Gallery Dept Tee'],[76,'Chrome Hearts Tee'],[77,'Ami Tee'],[78,'PLAY Tee'],
+  [79,'Stussy Tee'],[80,'Louis Vuitton Tee'],[81,'Nike Tee'],[82,'Palm Angels Tee'],
+  [83,'Dior Tee'],[84,'Travis Scott Tee'],[85,'Vlone Tee'],[86,'Fear of God Tee'],
+  [87,'Sp5der Tee'],[88,'Supreme Tee'],[89,'Off-White Tee'],[90,'R Culture Plain Tee'],
+  [91,'Denim Tears Tee'],[92,'New Balance Tee'],[93,'Lacoste Tee'],[94,'Balenciaga Tee'],
+  [95,'Acne Studios Tee'],[96,'Lacoste Tee']
+];
+
+const grid = document.getElementById('grid');
+grid.innerHTML = TEES.map(([id,name]) => `
+  <article class="card" data-name="${name.toLowerCase()} ${id}">
+    <div class="pic">
+      <img src="img/tees/${id}.${IMG_EXT}" alt="${name}" loading="lazy" onerror="this.style.display='none'" onload="this.style.display='block'">
+      <span class="no">#${id}</span>
+      <span class="sale">Sale</span>
+    </div>
+    <div class="info"><b>${name}</b><span class="pr"><s>₪${OLD_PRICE}</s><b>₪${PRICE}</b><svg class="up" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg></span></div>
+    <div class="buy">
+      <select class="size" aria-label="Size">
+        <option value="">Size</option>
+        ${SIZES.map(z => `<option>${z}</option>`).join('')}
+      </select>
+      <button class="add" data-id="${id}">Add to cart</button>
+    </div>
+  </article>`).join('');
+
+/* cart (saved in the browser) */
+function getCart(){ try{ return JSON.parse(localStorage.getItem('rc_cart')) || []; }catch(e){ return []; } }
+function saveCart(c){ try{ localStorage.setItem('rc_cart', JSON.stringify(c)); }catch(e){} }
+function updateCount(){ document.getElementById('cartCount').textContent = getCart().reduce((n,i)=>n+i.qty,0); }
+grid.addEventListener('click', e => {
+  const b = e.target.closest('.add'); if(!b) return;
+  const sel = b.parentElement.querySelector('.size');
+  if(!sel.value){ sel.classList.add('err'); sel.focus(); return; }
+  const id = +b.dataset.id, size = sel.value, t = TEES.find(x => x[0] === id), cart = getCart();
+  const row = cart.find(i => i.id === id && i.size === size);
+  row ? row.qty++ : cart.push({id, name:t[1], size, price:PRICE, qty:1});
+  saveCart(cart); updateCount();
+  b.textContent = 'Added ✓'; b.classList.add('done');
+  setTimeout(() => { b.textContent = 'Add to cart'; b.classList.remove('done'); }, 1200);
+});
+grid.addEventListener('change', e => { if(e.target.classList.contains('size')) e.target.classList.remove('err'); });
+updateCount();
+
+/* live search */
+const q = document.getElementById('q');
+function filter(){
+  const v = q.value.trim().toLowerCase(); let n = 0;
+  grid.querySelectorAll('.card').forEach(c => {
+    const show = !v || c.dataset.name.includes(v);
+    c.style.display = show ? '' : 'none'; if(show) n++;
+  });
+  document.getElementById('total').textContent = n;
+  document.getElementById('empty').style.display = n ? 'none' : 'block';
+}
+q.addEventListener('input', filter);
+document.getElementById('searchForm').addEventListener('submit', e => { e.preventDefault(); filter(); });
+</script>
+
+</body>
+</html>
