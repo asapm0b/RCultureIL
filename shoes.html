@@ -132,7 +132,7 @@ footer{border-top:1px solid var(--line);padding:56px 24px 40px}
   <p><span id="total">60</span> items · from ₪250</p>
 </section>
 
-<!-- IMAGES: put each photo in img/shoes/ named by its number, e.g. img/shoes/63.png (800 x 800 px) -->
+<!-- IMAGES: put each photo in shoes/ named by its number, e.g. shoes/63.png (800 x 800 px) -->
 <section class="products">
   <div class="grid" id="grid"></div>
   <div class="empty" id="empty">No shoes match your search.</div>
@@ -155,14 +155,15 @@ footer{border-top:1px solid var(--line);padding:56px 24px 40px}
 </footer>
 
 <script>
-const PRICE = 340, PREMIUM = 320; // premium = items #50 and up
+const PRICE = 250, PREMIUM = 320; // premium = items #50 and up
 const priceOf = id => id >= 50 ? PREMIUM : PRICE;
 const SIZES = ['36','37','38','39','40','41','42','43','44','45','46']; // EU sizes
+const IMG_DIR = ''; // '' = image folders sit next to the html files. Use 'img/' if they are inside an img folder
 const EXTS = ['png','jpg','jpeg','webp','PNG','JPG','JPEG','WEBP']; // the page tries each one
 const SHOES = [
   [1,'Nike Air Force 1 Low'], [2,'Nike Dunk Low Panda'], [3,'Nike Dunk Low Grey Fog'], [4,'Nike Air Max 90'],
-  [5,'Nike Air Max 95'], [6,'Numeris'], [7,'Numeris'], [8,' Masion Mihara'],
-  [9,'Masion Mihara x Amiri'], [10,'Nike Shox TL'], [11,'Nike Air Max 1'], [12,'Nike Cortez'],
+  [5,'Nike Air Max 95'], [6,'Nike Air Max 97'], [7,'Nike Air Max Plus TN'], [8,'Nike Vomero 5'],
+  [9,'Nike P-6000'], [10,'Nike Shox TL'], [11,'Nike Air Max 1'], [12,'Nike Cortez'],
   [13,'Nike Blazer Mid 77'], [14,'Nike SB Dunk Low'], [15,'Jordan 1 High Chicago'], [16,'Jordan 1 Low'],
   [17,'Jordan 3 White Cement'], [18,'Jordan 4 Bred'], [19,'Jordan 4 Military Black'], [20,'Jordan 5 Grape'],
   [21,'Jordan 6 Infrared'], [22,'Jordan 11 Concord'], [23,'Travis Scott x Jordan 1 Low'], [24,'Adidas Samba OG'],
@@ -179,14 +180,14 @@ const SHOES = [
 
 function nextExt(img){
   const n = +img.dataset.try + 1;
-  if(n < EXTS.length){ img.dataset.try = n; img.src = `img/shoes/${img.dataset.id}.${EXTS[n]}`; }
+  if(n < EXTS.length){ img.dataset.try = n; img.src = `${IMG_DIR}shoes/${img.dataset.id}.${EXTS[n]}`; }
   else img.style.display = 'none';
 }
 const grid = document.getElementById('grid');
 grid.innerHTML = SHOES.map(([id,name]) => `
   <article class="card" data-name="${name.toLowerCase()} ${id}">
     <div class="pic">
-      <img src="img/shoes/${id}.${EXTS[0]}" data-id="${id}" data-try="0" alt="${name}" loading="lazy" onerror="nextExt(this)" onload="this.style.display='block'">
+      <img src="${IMG_DIR}shoes/${id}.${EXTS[0]}" data-id="${id}" data-try="0" alt="${name}" loading="lazy" onerror="nextExt(this)" onload="this.style.display='block'">
       <span class="no">#${id}</span>
     </div>
     <div class="info"><b>${name}</b><span class="pr"><b>₪${priceOf(id)}</b></span></div>
