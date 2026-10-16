@@ -147,7 +147,7 @@ footer{border-top:1px solid var(--line);padding:56px 24px 40px;margin-top:48px}
   <p>15 pants · 15 shorts</p>
 </section>
 
-<!-- IMAGES: img/pants/1.png ... 15.png  and  img/shorts/1.png ... 15.png (800 x 800 px) -->
+<!-- IMAGES: pants/1.png ... 15.png  and  shorts/1.png ... 15.png (800 x 800 px) -->
 <section class="products" id="sec-pants">
   <div class="grid" id="grid-pants"></div>
 </section>
@@ -173,7 +173,7 @@ footer{border-top:1px solid var(--line);padding:56px 24px 40px;margin-top:48px}
 <aside class="pop" id="pop" role="dialog" aria-modal="true" aria-label="15% off">
   <div class="pop-card">
     <button class="pop-x" id="popX" aria-label="Close">×</button>
-    <div class="pop-pic"><img src="img/popup.jpg" alt="" onerror="this.parentElement.remove()"></div>
+    <div class="pop-pic"><img src="popup.jpg" alt="" onerror="this.parentElement.remove()"></div>
     <div class="pop-head">
       <small>Welcome gift</small>
       <div class="big">15%<span>OFF</span></div>
@@ -194,6 +194,7 @@ footer{border-top:1px solid var(--line);padding:56px 24px 40px;margin-top:48px}
 </aside>
 
 <script>
+const IMG_DIR = ''; // '' = image folders sit next to the html files. Use 'img/' if they are inside an img folder
 const EXTS = ['png','jpg','jpeg','webp','PNG','JPG','JPEG','WEBP'];
 const SIZES = ['S','M','L','XL','XXL'];
 const DISCOUNT_CODE = 'RC15';
@@ -204,14 +205,14 @@ const SECTIONS = {
 
 function nextExt(img){
   const n = +img.dataset.try + 1;
-  if(n < EXTS.length){ img.dataset.try = n; img.src = `img/${img.dataset.cat}/${img.dataset.id}.${EXTS[n]}`; }
+  if(n < EXTS.length){ img.dataset.try = n; img.src = `${IMG_DIR}${img.dataset.cat}/${img.dataset.id}.${EXTS[n]}`; }
   else img.style.display = 'none';
 }
 for(const [cat,sec] of Object.entries(SECTIONS)){
   document.getElementById('grid-'+cat).innerHTML = sec.items.map((name,i) => { const id = i+1; return `
   <article class="card" data-cat="${cat}" data-name="${name.toLowerCase()} ${id}">
     <div class="pic">
-      <img src="img/${cat}/${id}.${EXTS[0]}" data-cat="${cat}" data-id="${id}" data-try="0" alt="${name}" loading="lazy" onerror="nextExt(this)" onload="this.style.display='block'">
+      <img src="${IMG_DIR}${cat}/${id}.${EXTS[0]}" data-cat="${cat}" data-id="${id}" data-try="0" alt="${name}" loading="lazy" onerror="nextExt(this)" onload="this.style.display='block'">
       <span class="no">#${id}</span>
     </div>
     <div class="info"><b>${name}</b><span>₪${sec.price}</span></div>
