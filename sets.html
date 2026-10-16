@@ -129,10 +129,10 @@ footer{border-top:1px solid var(--line);padding:56px 24px 40px}
 
 <section class="title">
   <h1>Sets<em>סטים</em></h1>
-  <p><span id="total">31</span> items · ₪229 each</p>
+  <p><span id="total">31</span> items · ₪150 each</p>
 </section>
 
-<!-- IMAGES: put each photo in img/sets/ named by its number, e.g. img/sets/63.png (800 x 800 px) -->
+<!-- IMAGES: put each photo in sets/ named by its number, e.g. sets/63.png (800 x 800 px) -->
 <section class="products">
   <div class="grid" id="grid"></div>
   <div class="empty" id="empty">No sets match your search.</div>
@@ -155,30 +155,31 @@ footer{border-top:1px solid var(--line);padding:56px 24px 40px}
 </footer>
 
 <script>
-const PRICE = 229;
+const PRICE = 150;
 const SIZES = ['S','M','L','XL','XXL'];
+const IMG_DIR = ''; // '' = image folders sit next to the html files. Use 'img/' if they are inside an img folder
 const EXTS = ['png','jpg','jpeg','webp','PNG','JPG','JPEG','WEBP']; // the page tries each one
 const SETS = [
   [1,'Essentials Set'], [2,'Corteiz Set'], [3,'Nike Tech Fleece Set'], [4,'Represent Set'],
   [5,'Stone Island Set'], [6,'HellStar Set'], [7,'Gallery Dept Set'], [8,'Chrome Hearts Set'],
   [9,'Amiri Set'], [10,'Stussy Set'], [11,'Supreme Set'], [12,'Fear of God Set'],
-  [13,'Sp5der Set'], [14,'Trapstar Set'], [15,'Palm Angels Set'], [16,'Lacoste Set'],
+  [13,'Sp5der Set'], [14,'Trapstar Set'], [15,'Palm Angels Set'], [16,'Off-White Set'],
   [17,'Ralph Lauren Set'], [18,'BAPE Set'], [19,'Balenciaga Set'], [20,'Louis Vuitton Set'],
-  [21,'Dior Set'], [22,'Bubbery Set'], [23,'Lanvin Set'], [24,'Denim Tears Set'],
-  [25,'Vlone Set'], [26,'Lacoste Blue Set'], [27,'New Balance Set'], [28,'Under Armor Set'],
-  [29,'SYNA Set'], [30,'Nike Set'], [31,'R Culture Plain Set']
+  [21,'Dior Set'], [22,'Versace Set'], [23,'Lanvin Set'], [24,'Denim Tears Set'],
+  [25,'Vlone Set'], [26,'Travis Scott Set'], [27,'New Balance Set'], [28,'Under Armor Set'],
+  [29,'Adidas Set'], [30,'Nike Set'], [31,'R Culture Plain Set']
 ];
 
 function nextExt(img){
   const n = +img.dataset.try + 1;
-  if(n < EXTS.length){ img.dataset.try = n; img.src = `img/sets/${img.dataset.id}.${EXTS[n]}`; }
+  if(n < EXTS.length){ img.dataset.try = n; img.src = `${IMG_DIR}sets/${img.dataset.id}.${EXTS[n]}`; }
   else img.style.display = 'none';
 }
 const grid = document.getElementById('grid');
 grid.innerHTML = SETS.map(([id,name]) => `
   <article class="card" data-name="${name.toLowerCase()} ${id}">
     <div class="pic">
-      <img src="img/sets/${id}.${EXTS[0]}" data-id="${id}" data-try="0" alt="${name}" loading="lazy" onerror="nextExt(this)" onload="this.style.display='block'">
+      <img src="${IMG_DIR}sets/${id}.${EXTS[0]}" data-id="${id}" data-try="0" alt="${name}" loading="lazy" onerror="nextExt(this)" onload="this.style.display='block'">
       <span class="no">#${id}</span>
     </div>
     <div class="info"><b>${name}</b><span class="pr"><b>₪${PRICE}</b></span></div>
