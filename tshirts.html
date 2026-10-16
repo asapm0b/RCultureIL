@@ -132,7 +132,7 @@ footer{border-top:1px solid var(--line);padding:56px 24px 40px}
   <p><span id="total">34</span> items · <s>₪105</s> ₪90 each</p>
 </section>
 
-<!-- IMAGES: put each photo in img/tees/ named by its number, e.g. img/tees/63.png (800 x 800 px) -->
+<!-- IMAGES: put each photo in tees/ named by its number, e.g. tees/63.png (800 x 800 px) -->
 <section class="products">
   <div class="grid" id="grid"></div>
   <div class="empty" id="empty">No T-shirts match your search.</div>
@@ -158,24 +158,30 @@ footer{border-top:1px solid var(--line);padding:56px 24px 40px}
 const PRICE = 90;
 const OLD_PRICE = 105;
 const SIZES = ['S','M','L','XL','XXL'];
-const IMG_EXT = 'png'; // change to jpg / webp if needed
+const IMG_DIR = ''; // '' = image folders sit next to the html files. Use 'img/' if they are inside an img folder
+const EXTS = ['png','jpg','jpeg','webp','PNG','JPG','JPEG','WEBP']; // the page tries each one
 const TEES = [
-  [63,'Ralph Lauren Tee'],[64,'Corteiz Tee'],[65,'Cortiez Tee'],[66,'Cortiez Tee'],
-  [67,'Cortiez Tee'],[68,'Essentials Tee'],[69,'Represent Tee'],[70,'Stone Island Tee'],
+  [63,'Ralph Lauren Tee'],[64,'Corteiz Tee'],[65,'Cortiez P Tee'],[66,'Cortiez B Tee'],
+  [67,'Cortiez BL Tee'],[68,'Essentials Tee'],[69,'Represent Tee'],[70,'Stone Island Tee'],
   [71,'HellStar Tee'],[72,'BAPE Tee'],[73,'Balenciaga Tee'],[74,'Balenciaga 2 Tee'],
-  [75,'Gallery Dept Tee'],[76,'Chrome Hearts Tee'],[77,'Ami Tee'],[78,'PLAY Tee'],
+  [75,'Gallery Dept Tee'],[76,'Chrome Hearts Tee'],[77,'Amiri Tee'],[78,'Amiri 2 Tee'],
   [79,'Stussy Tee'],[80,'Louis Vuitton Tee'],[81,'Nike Tee'],[82,'Palm Angels Tee'],
   [83,'Dior Tee'],[84,'Travis Scott Tee'],[85,'Vlone Tee'],[86,'Fear of God Tee'],
   [87,'Sp5der Tee'],[88,'Supreme Tee'],[89,'Off-White Tee'],[90,'R Culture Plain Tee'],
-  [91,'Denim Tears Tee'],[92,'New Balance Tee'],[93,'Lacoste Tee'],[94,'Balenciaga Tee'],
-  [95,'Acne Studios Tee'],[96,'Lacoste Tee']
+  [91,'Denim Tears Tee'],[92,'New Balance Tee'],[93,'Lanvin Tee'],[94,'Under Armor Tee'],
+  [95,'Nike 2 Tee'],[96,'Versace Tee']
 ];
 
+function nextExt(img){
+  const n = +img.dataset.try + 1;
+  if(n < EXTS.length){ img.dataset.try = n; img.src = `${IMG_DIR}tees/${img.dataset.id}.${EXTS[n]}`; }
+  else img.style.display = 'none';
+}
 const grid = document.getElementById('grid');
 grid.innerHTML = TEES.map(([id,name]) => `
   <article class="card" data-name="${name.toLowerCase()} ${id}">
     <div class="pic">
-      <img src="img/tees/${id}.${IMG_EXT}" alt="${name}" loading="lazy" onerror="this.style.display='none'" onload="this.style.display='block'">
+      <img src="${IMG_DIR}tees/${id}.${EXTS[0]}" data-id="${id}" data-try="0" alt="${name}" loading="lazy" onerror="nextExt(this)" onload="this.style.display='block'">
       <span class="no">#${id}</span>
       <span class="sale">Sale</span>
     </div>
