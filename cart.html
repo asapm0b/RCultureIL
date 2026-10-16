@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cart | R CULTURE IL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#fff;--ink:#0a0a0a;--muted:#6b6b6b;--line:#e8e8e8;
+  --display:'Anton','Impact','Arial Narrow',sans-serif;
+  --body:'Inter',system-ui,-apple-system,'Segoe UI',Arial,sans-serif}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body)}
+a{color:inherit;text-decoration:none}
+img{display:block}
+button{font:inherit;cursor:pointer}
+
+.ticker{background:var(--ink);color:#fff;font-size:12px;letter-spacing:.12em;text-transform:uppercase;overflow:hidden;white-space:nowrap;padding:9px 0}
+.ticker span{display:inline-block;padding-left:100%;animation:scroll 22s linear infinite}
+@keyframes scroll{to{transform:translateX(-100%)}}
+
+header{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{max-width:1200px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.left,.right{display:flex;align-items:center;gap:16px}
+.logo{font-family:var(--display);font-size:22px;letter-spacing:.06em;white-space:nowrap}
+nav{display:flex;gap:28px;font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+nav a{position:relative;padding:4px 0}
+nav a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--ink);transition:width .25s}
+nav a:hover::after{width:100%}
+.cart{font-size:13px;font-weight:600;letter-spacing:.08em;background:none;border:0;padding:0;color:inherit}
+.cart-btn{position:relative;display:flex;align-items:center;justify-content:center;width:36px;height:36px;border:1.5px solid var(--ink);background:var(--ink);color:#fff}
+.cart-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cart-count{position:absolute;top:-7px;right:-7px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--ink);color:#fff;border:1.5px solid #fff;font-size:10px;font-weight:600;line-height:14px;text-align:center}
+
+.title{max-width:1200px;margin:0 auto;padding:64px 24px 8px;display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.title h1{font-family:var(--display);font-weight:400;font-size:clamp(44px,8vw,96px);line-height:.95;letter-spacing:.02em;text-transform:uppercase;margin:0}
+.title h1 em{font-family:var(--body);font-style:normal;font-size:.3em;color:var(--muted);letter-spacing:.05em;margin-left:12px}
+.title p{margin:0;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+.wrap{max-width:1200px;margin:0 auto;padding:32px 24px 96px;display:grid;grid-template-columns:1fr 360px;gap:40px;align-items:start}
+.note{grid-column:1/-1;font-size:13px;border:1px solid var(--line);padding:12px 16px;display:none}
+.note a{font-weight:600;text-decoration:underline}
+.note.warn{border-color:#dc2626;color:#dc2626}
+
+.item{display:grid;grid-template-columns:96px 1fr auto;gap:18px;padding:20px 0;border-top:1px solid var(--line);align-items:center}
+.item:last-child{border-bottom:1px solid var(--line)}
+.thumb{width:96px;height:96px;background:#f2f2f2;position:relative;overflow:hidden}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.meta b{display:block;font-size:15px;font-weight:600}
+.meta span{display:block;margin-top:4px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.qty{display:inline-flex;align-items:center;margin-top:12px;border:1.5px solid var(--ink)}
+.qty button{width:30px;height:30px;border:0;background:none;font-size:16px}
+.qty button:hover{background:var(--ink);color:#fff}
+.qty output{min-width:30px;text-align:center;font-size:13px;font-weight:600}
+.side{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:14px}
+.side b{font-size:15px;font-weight:600}
+.rm{border:0;background:none;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:underline;padding:0}
+.rm:hover{color:var(--ink)}
+
+.empty{text-align:center;padding:80px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.empty h2{font-family:var(--display);font-weight:400;font-size:40px;letter-spacing:.04em;text-transform:uppercase;margin:0 0 20px}
+
+.sum{position:sticky;top:96px;border:1.5px solid var(--ink);padding:26px}
+.sum h2{font-family:var(--display);font-weight:400;font-size:26px;letter-spacing:.05em;text-transform:uppercase;margin:0 0 18px}
+.row{display:flex;justify-content:space-between;font-size:14px;padding:6px 0}
+.row.total{font-size:17px;font-weight:600;border-top:1px solid var(--line);margin-top:10px;padding-top:14px}
+.ship{margin:4px 0 14px;font-size:12px;letter-spacing:.06em;color:var(--muted)}
+.bar2{height:4px;background:var(--line);margin-top:8px}
+.bar2 i{display:block;height:100%;background:var(--ink);width:0;transition:width .4s}
+.btn{display:block;width:100%;margin-top:18px;padding:16px 0;border:1.5px solid var(--ink);background:var(--ink);color:#fff;font-size:12px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;text-align:center;transition:background .25s,color .25s}
+.btn:hover{background:#fff;color:var(--ink)}
+.btn.alt{background:#fff;color:var(--ink)}
+.btn.alt:hover{background:var(--ink);color:#fff}
+
+footer{border-top:1px solid var(--line);padding:56px 24px 40px}
+.foot{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;gap:32px}
+.foot .logo{font-size:26px}
+.foot p{color:var(--muted);font-size:13px;margin:10px 0 0}
+.links{display:flex;gap:28px;flex-wrap:wrap;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.links a:hover{text-decoration:underline}
+.copy{max-width:1200px;margin:40px auto 0;font-size:12px;color:var(--muted)}
+
+@media(max-width:900px){.wrap{grid-template-columns:1fr}.sum{position:static}}
+@media(max-width:640px){
+  nav{display:none}
+  .bar{padding:12px 16px}.logo{font-size:18px}
+  .title{padding:40px 20px 8px}.wrap{padding:24px 20px 64px}
+  .item{grid-template-columns:72px 1fr;gap:14px}
+  .thumb{width:72px;height:72px}
+  .side{grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:center}
+}
+</style>
+</head>
+<body>
+
+<div class="ticker"><span>Free Shipping Over ₪350 &nbsp;·&nbsp; New Drops Weekly &nbsp;·&nbsp; Best Quality &nbsp;·&nbsp; Israel's #1 Streetwear</span></div>
+
+<header>
+  <div class="bar">
+    <div class="left"><a class="logo" href="index.html">R CULTURE IL</a></div>
+    <nav>
+      <a href="index.html#shop">Shop</a>
+      <a href="COL.html">Collection</a>
+      <a href="A.html">About</a>
+      <a href="SH.html">Shipping</a>
+    </nav>
+    <div class="right">
+      <a class="cart" id="loginLink" href="log.html">LOGIN</a>
+      <a class="cart-btn" href="cart.html" aria-label="Cart">
+        <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<section class="title">
+  <h1>Cart<em>עגלה</em></h1>
+  <p id="countLabel">0 items</p>
+</section>
+
+<main class="wrap">
+  <div class="note" id="note"></div>
+  <section id="list"></section>
+  <aside class="sum" id="sum">
+    <h2>Summary</h2>
+    <div class="row"><span>Subtotal</span><span id="sub">₪0</span></div>
+    <div class="row"><span>Shipping</span><span id="shipTxt">—</span></div>
+    <div class="ship" id="shipNote"></div>
+    <div class="bar2"><i id="shipBar"></i></div>
+    <div class="row total"><span>Total</span><span id="total">₪0</span></div>
+    <button class="btn" id="checkout">Checkout</button>
+    <a class="btn alt" href="index.html#shop">Continue shopping</a>
+  </aside>
+</main>
+
+<footer>
+  <div class="foot">
+    <div><div class="logo">R CULTURE IL</div><p>Sneakers &amp; Streetwear · Israel</p></div>
+    <div class="links">
+      <a href="COL.html">Collection</a><a href="SH.html">Shipping</a><a href="A.html">About</a>
+      <a href="https://www.instagram.com/rcultureil/" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </div>
+  <div class="copy">R Culture IL® 2026</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+/* ===== SETTINGS ===== */
+const SUPABASE_URL = 'https://syjaeymotxjgxnweciho.supabase.co';
+const SUPABASE_ANON_KEY = 'PASTE_YOUR_ANON_KEY_HERE';   // Supabase > Project Settings > API > anon public
+const TABLE = 'cart_items';        // columns: id, user_id, product_id, name, size, price, qty
+const IMG_DIR = '';                // same setting as the product pages
+const CHECKOUT_URL = 'checkout.html';
+const FREE_SHIPPING = 350, SHIPPING_FEE = 30;
+const EXTS = ['png','jpg','jpeg','webp','PNG','JPG','JPEG','WEBP'];
+const FOLDER = {tees:'tees', sets:'sets', shoes:'shoes', shorts:'shorts', pants:'pants'};
+
+const keyReady = !SUPABASE_ANON_KEY.startsWith('PASTE');
+const sb = (keyReady && window.supabase) ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+let user = null, items = [];
+
+const $ = id => document.getElementById(id);
+const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money = n => '₪' + (Math.round(n * 100) / 100);
+
+/* ----- local cart (guests, and what the product pages write) ----- */
+function localLoad(){ try{ return (JSON.parse(localStorage.getItem('rc_cart')) || []).map(r => ({cat:r.cat || 'tees', id:r.id, name:r.name, size:r.size || '', price:+r.price, qty:+r.qty || 1})); }catch(e){ return []; } }
+function localSave(arr){ try{ localStorage.setItem('rc_cart', JSON.stringify(arr)); }catch(e){} }
+const pid = r => `${r.cat}-${r.id}`;
+
+/* ----- load ----- */
+async function load(){
+  if(sb && user){
+    const local = localLoad();
+    if(local.length){ await mergeLocal(local); localStorage.removeItem('rc_cart'); }
+    const {data, error} = await sb.from(TABLE).select('*').eq('user_id', user.id);
+    if(error){ showNote('Could not load your cart from Supabase: ' + error.message, true); items = []; }
+    else items = data.map(fromRow);
+  } else items = localLoad().map(r => ({...r, dbId:null}));
+  render();
+}
+function fromRow(r){
+  const m = /^(tees|sets|shoes|shorts|pants)-(\d+)$/.exec(r.product_id || '');
+  return {dbId:r.id, pid:r.product_id, cat:m ? m[1] : null, id:m ? +m[2] : null, name:r.name, size:r.size || '', price:+r.price, qty:+r.qty || 1};
+}
+async function mergeLocal(local){
+  const {data} = await sb.from(TABLE).select('*').eq('user_id', user.id);
+  const have = data || [];
+  for(const r of local){
+    const hit = have.find(x => x.product_id === pid(r) && (x.size || '') === r.size);
+    if(hit) await sb.from(TABLE).update({qty:(+hit.qty || 0) + r.qty}).eq('id', hit.id);
+    else await sb.from(TABLE).insert({user_id:user.id, product_id:pid(r), name:r.name, size:r.size, price:r.price, qty:r.qty});
+  }
+}
+
+/* ----- changes ----- */
+async function setQty(i, q){
+  const it = items[i]; if(!it) return;
+  if(q < 1) return removeItem(i);
+  it.qty = q;
+  if(sb && user) await sb.from(TABLE).update({qty:q}).eq('id', it.dbId);
+  else localSave(items.map(({dbId, ...r}) => r));
+  render();
+}
+async function removeItem(i){
+  const it = items[i]; if(!it) return;
+  items.splice(i, 1);
+  if(sb && user) await sb.from(TABLE).delete().eq('id', it.dbId);
+  else localSave(items.map(({dbId, ...r}) => r));
+  render();
+}
+
+/* ----- render ----- */
+function thumb(it){
+  if(!it.cat) return '';
+  return `<img src="${IMG_DIR}${FOLDER[it.cat]}/${it.id}.${EXTS[0]}" data-try="0" data-cat="${it.cat}" data-id="${it.id}" alt="" onerror="nextExt(this)">`;
+}
+function nextExt(img){
+  const n = +img.dataset.try + 1;
+  if(n < EXTS.length){ img.dataset.try = n; img.src = `${IMG_DIR}${FOLDER[img.dataset.cat]}/${img.dataset.id}.${EXTS[n]}`; }
+  else img.style.display = 'none';
+}
+function render(){
+  const count = items.reduce((n, i) => n + i.qty, 0);
+  const sub = items.reduce((n, i) => n + i.qty * i.price, 0);
+  const ship = !items.length ? 0 : (sub >= FREE_SHIPPING ? 0 : SHIPPING_FEE);
+  $('cartCount').textContent = count;
+  $('countLabel').textContent = count + (count === 1 ? ' item' : ' items');
+
+  $('list').innerHTML = items.length ? items.map((it, i) => `
+    <article class="item">
+      <div class="thumb">${thumb(it)}</div>
+      <div class="meta">
+        <b>${esc(it.name)}</b>
+        <span>${it.size ? 'Size ' + esc(it.size) + ' · ' : ''}${money(it.price)}</span>
+        <div class="qty">
+          <button data-a="dec" data-i="${i}" aria-label="Less">−</button>
+          <output>${it.qty}</output>
+          <button data-a="inc" data-i="${i}" aria-label="More">+</button>
+        </div>
+      </div>
+      <div class="side"><b>${money(it.price * it.qty)}</b><button class="rm" data-a="rm" data-i="${i}">Remove</button></div>
+    </article>`).join('')
+    : `<div class="empty"><h2>Your cart is empty</h2><a class="btn" style="max-width:260px;margin:0 auto" href="index.html#shop">Start shopping</a></div>`;
+
+  $('sum').style.display = items.length ? '' : 'none';
+  $('sub').textContent = money(sub);
+  $('shipTxt').textContent = ship ? money(ship) : 'Free';
+  $('total').textContent = money(sub + ship);
+  const left = FREE_SHIPPING - sub;
+  $('shipNote').textContent = left > 0 ? `Add ${money(left)} more for free shipping` : 'You got free shipping';
+  $('shipBar').style.width = Math.min(100, sub / FREE_SHIPPING * 100) + '%';
+
+  if(!sb) showNote(keyReady ? 'Supabase could not load. Your cart is saved on this device only.' : 'Supabase key not set yet — your cart is saved on this device only.', !keyReady);
+  else if(!user) showNote('<a href="log.html">Log in</a> to save your cart to your account and keep it on every device.');
+  else $('note').style.display = 'none';
+}
+function showNote(html, warn){ const n = $('note'); n.innerHTML = html; n.className = 'note' + (warn ? ' warn' : ''); n.style.display = 'block'; }
+
+$('list').addEventListener('click', e => {
+  const b = e.target.closest('button[data-a]'); if(!b) return;
+  const i = +b.dataset.i, a = b.dataset.a;
+  if(a === 'inc') setQty(i, items[i].qty + 1);
+  if(a === 'dec') setQty(i, items[i].qty - 1);
+  if(a === 'rm') removeItem(i);
+});
+$('checkout').addEventListener('click', () => {
+  if(sb && !user){ location.href = 'log.html'; return; }
+  location.href = CHECKOUT_URL;
+});
+
+/* ----- login / logout link ----- */
+function authUI(){
+  const l = $('loginLink');
+  if(user){ l.textContent = 'LOGOUT'; l.href = '#'; l.onclick = async e => { e.preventDefault(); await sb.auth.signOut(); }; }
+  else { l.textContent = 'LOGIN'; l.href = 'log.html'; l.onclick = null; }
+}
+
+/* ----- start ----- */
+(async () => {
+  if(sb){
+    const {data} = await sb.auth.getSession();
+    user = data.session ? data.session.user : null;
+    authUI();
+    sb.auth.onAuthStateChange((ev, session) => {
+      if(ev === 'SIGNED_IN' || ev === 'SIGNED_OUT'){ user = session ? session.user : null; authUI(); load(); }
+    });
+  }
+  load();
+})();
+</script>
+
+</body>
+</html>
