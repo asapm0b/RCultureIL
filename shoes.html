@@ -132,7 +132,7 @@ footer{border-top:1px solid var(--line);padding:56px 24px 40px}
   <p><span id="total">60</span> items · from ₪250</p>
 </section>
 
-<!-- IMAGES: put each photo in img/shoes/ named by its number, e.g. img/shoes/63.png (800 x 800 px) -->
+<!-- IMAGES: put each photo in shoes/ named by its number, e.g. shoes/63.png (800 x 800 px) -->
 <section class="products">
   <div class="grid" id="grid"></div>
   <div class="empty" id="empty">No shoes match your search.</div>
@@ -179,14 +179,14 @@ const SHOES = [
 
 function nextExt(img){
   const n = +img.dataset.try + 1;
-  if(n < EXTS.length){ img.dataset.try = n; img.src = `img/shoes/${img.dataset.id}.${EXTS[n]}`; }
+  if(n < EXTS.length){ img.dataset.try = n; img.src = `shoes/${img.dataset.id}.${EXTS[n]}`; }
   else img.style.display = 'none';
 }
 const grid = document.getElementById('grid');
 grid.innerHTML = SHOES.map(([id,name]) => `
   <article class="card" data-name="${name.toLowerCase()} ${id}">
     <div class="pic">
-      <img src="img/shoes/${id}.${EXTS[0]}" data-id="${id}" data-try="0" alt="${name}" loading="lazy" onerror="nextExt(this)" onload="this.style.display='block'">
+      <img src="shoes/${id}.${EXTS[0]}" data-id="${id}" data-try="0" alt="${name}" loading="lazy" onerror="nextExt(this)" onload="this.style.display='block'">
       <span class="no">#${id}</span>
     </div>
     <div class="info"><b>${name}</b><span class="pr"><b>₪${priceOf(id)}</b></span></div>
