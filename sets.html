@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sets | R CULTURE IL</title>
+<link rel="icon" type="image/png" href="favicon.png?v=2">
+<link rel="shortcut icon" href="favicon.png?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&display=swap">
@@ -71,6 +73,9 @@ nav a:hover::after,nav a.on::after{width:100%}
 .add{flex:1;height:32px;padding:0;border:1.5px solid var(--ink);background:transparent;color:var(--ink);font:inherit;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:background .25s,color .25s}
 .add:hover,.add:focus-visible{background:var(--ink);color:#fff}
 .add.done{background:var(--ink);color:#fff}
+.cat-head{grid-column:1/-1;display:flex;align-items:baseline;gap:12px;margin:24px 0 0;padding-bottom:12px;border-bottom:1px solid var(--line);font-family:var(--display);font-weight:400;font-size:clamp(32px,5vw,56px);line-height:1;letter-spacing:.03em;text-transform:uppercase}
+.cat-head:first-child{margin-top:0}
+.cat-head em{font-family:var(--body);font-style:normal;font-size:13px;letter-spacing:.1em;color:var(--muted)}
 .empty{display:none;text-align:center;color:var(--muted);padding:64px 0;font-size:14px}
 
 footer{border-top:1px solid var(--line);padding:56px 24px 40px}
@@ -129,13 +134,13 @@ footer{border-top:1px solid var(--line);padding:56px 24px 40px}
 
 <section class="title">
   <h1>Sets<em>סטים</em></h1>
-  <p><span id="total">31</span> items · ₪229 each</p>
+  <p><span id="total">51</span> items · ₪229 each</p>
 </section>
 
-<!-- IMAGES: put each photo in sets/ named by its number, e.g. sets/63.png (800 x 800 px) -->
+<!-- IMAGES: sweaters go in sweaters/ (1.png to 20.png), sets go in sets/ (1.png to 31.png). 800 x 800 px -->
 <section class="products">
   <div class="grid" id="grid"></div>
-  <div class="empty" id="empty">No sets match your search.</div>
+  <div class="empty" id="empty">No items match your search.</div>
 </section>
 
 <footer>
@@ -159,6 +164,15 @@ const PRICE = 229;
 const SIZES = ['S','M','L','XL','XXL'];
 const IMG_DIR = ''; // '' = image folders sit next to the html files. Use 'img/' if they are inside an img folder
 const EXTS = ['png','jpg','jpeg','webp','PNG','JPG','JPEG','WEBP']; // the page tries each one
+
+/* 20 sweater slots: rename them here whenever you want, e.g. [1,'Essentials Sweater'] */
+const SWEATERS = [
+  [1,'Sweater 1'], [2,'Sweater 2'], [3,'Sweater 3'], [4,'Sweater 4'],
+  [5,'Sweater 5'], [6,'Sweater 6'], [7,'Sweater 7'], [8,'Sweater 8'],
+  [9,'Sweater 9'], [10,'Sweater 10'], [11,'Sweater 11'], [12,'Sweater 12'],
+  [13,'Sweater 13'], [14,'Sweater 14'], [15,'Sweater 15'], [16,'Sweater 16'],
+  [17,'Sweater 17'], [18,'Sweater 18'], [19,'Sweater 19'], [20,'Sweater 20']
+];
 const SETS = [
   [1,'Essentials Set'], [2,'Corteiz Set'], [3,'Nike Tech Fleece Set'], [4,'Represent Set'],
   [5,'Stone Island Set'], [6,'HellStar Set'], [7,'Gallery Dept Set'], [8,'Chrome Hearts Set'],
@@ -169,18 +183,24 @@ const SETS = [
   [25,'Vlone Set'], [26,'Lacoste Set'], [27,'New Balance Set'], [28,'Under Armor Set'],
   [29,'SYNA Set'], [30,'Nike Set'], [31,'R Culture Plain Set']
 ];
+/* sweaters first, then sets */
+const ITEMS = [
+  ...SWEATERS.map(([id,name]) => ({cat:'sweaters', id, name})),
+  ...SETS.map(([id,name]) => ({cat:'sets', id, name}))
+];
 
 function nextExt(img){
   const n = +img.dataset.try + 1;
-  if(n < EXTS.length){ img.dataset.try = n; img.src = `${IMG_DIR}sets/${img.dataset.id}.${EXTS[n]}`; }
+  if(n < EXTS.length){ img.dataset.try = n; img.src = `${IMG_DIR}${img.dataset.cat}/${img.dataset.id}.${EXTS[n]}`; }
   else img.style.display = 'none';
 }
 const grid = document.getElementById('grid');
-grid.innerHTML = SETS.map(([id,name]) => `
-  <article class="card" data-name="${name.toLowerCase()} ${id}">
+const HEADS = {sweaters:'Sweaters', sets:'Sets'};
+function card({cat,id,name}){ return `
+  <article class="card" data-cat="${cat}" data-name="${name.toLowerCase()} ${cat} ${id}">
     <div class="pic">
-      <img src="${IMG_DIR}sets/${id}.${EXTS[0]}" data-id="${id}" data-try="0" alt="${name}" loading="lazy" onerror="nextExt(this)" onload="this.style.display='block'">
-      <span class="no">#${id}</span>
+      <img src="${IMG_DIR}${cat}/${id}.${EXTS[0]}" data-cat="${cat}" data-id="${id}" data-try="0" alt="${name}" loading="lazy" onerror="nextExt(this)" onload="this.style.display='block'">
+      <span class="no">#${cat === 'sweaters' ? 'SW' : ''}${id}</span>
     </div>
     <div class="info"><b>${name}</b><span class="pr"><b>₪${PRICE}</b></span></div>
     <div class="buy">
@@ -188,9 +208,15 @@ grid.innerHTML = SETS.map(([id,name]) => `
         <option value="">Size</option>
         ${SIZES.map(z => `<option>${z}</option>`).join('')}
       </select>
-      <button class="add" data-id="${id}">Add to cart</button>
+      <button class="add" data-cat="${cat}" data-id="${id}">Add to cart</button>
     </div>
-  </article>`).join('');
+  </article>`; }
+/* SWEATERS first, then SETS, each with its own heading */
+grid.innerHTML = ['sweaters','sets'].map(c => {
+  const list = ITEMS.filter(i => i.cat === c);
+  return `<h2 class="cat-head" data-head="${c}">${HEADS[c]}<em>${list.length} items</em></h2>` + list.map(card).join('');
+}).join('');
+document.getElementById('total').textContent = ITEMS.length;
 
 /* cart (saved in the browser) */
 function getCart(){ try{ return JSON.parse(localStorage.getItem('rc_cart')) || []; }catch(e){ return []; } }
@@ -200,9 +226,10 @@ grid.addEventListener('click', e => {
   const b = e.target.closest('.add'); if(!b) return;
   const sel = b.parentElement.querySelector('.size');
   if(!sel.value){ sel.classList.add('err'); sel.focus(); return; }
-  const id = +b.dataset.id, size = sel.value, t = SETS.find(x => x[0] === id), cart = getCart();
-  const row = cart.find(i => i.id === id && i.size === size && i.cat === 'sets');
-  row ? row.qty++ : cart.push({id, cat:'sets', name:t[1], size, price:PRICE, qty:1});
+  const id = +b.dataset.id, cat = b.dataset.cat, size = sel.value;
+  const t = ITEMS.find(x => x.cat === cat && x.id === id), cart = getCart();
+  const row = cart.find(i => i.id === id && i.size === size && i.cat === cat);
+  row ? row.qty++ : cart.push({id, cat, name:t.name, size, price:PRICE, qty:1});
   saveCart(cart); updateCount();
   b.textContent = 'Added ✓'; b.classList.add('done');
   setTimeout(() => { b.textContent = 'Add to cart'; b.classList.remove('done'); }, 1200);
@@ -217,6 +244,10 @@ function filter(){
   grid.querySelectorAll('.card').forEach(c => {
     const show = !v || c.dataset.name.includes(v);
     c.style.display = show ? '' : 'none'; if(show) n++;
+  });
+  grid.querySelectorAll('.cat-head').forEach(h => {
+    const any = [...grid.querySelectorAll('.card[data-cat="'+h.dataset.head+'"]')].some(c => c.style.display !== 'none');
+    h.style.display = any ? '' : 'none';
   });
   document.getElementById('total').textContent = n;
   document.getElementById('empty').style.display = n ? 'none' : 'block';
