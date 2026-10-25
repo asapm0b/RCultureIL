@@ -134,10 +134,10 @@ footer{border-top:1px solid var(--line);padding:56px 24px 40px}
 
 <section class="title">
   <h1>Sets<em>סטים</em></h1>
-  <p><span id="total">51</span> items · ₪229 each</p>
+  <p><span id="total">71</span> items · ₪229 each</p>
 </section>
 
-<!-- IMAGES: sweaters go in sweaters/ (1.png to 20.png), sets go in sets/ (1.png to 31.png). 800 x 800 px -->
+<!-- IMAGES: sweaters/1.png to 20.png, sets/1.png to 31.png, coats/1.png to 20.png (800 x 800 px) -->
 <section class="products">
   <div class="grid" id="grid"></div>
   <div class="empty" id="empty">No items match your search.</div>
@@ -165,13 +165,13 @@ const SIZES = ['S','M','L','XL','XXL'];
 const IMG_DIR = ''; // '' = image folders sit next to the html files. Use 'img/' if they are inside an img folder
 const EXTS = ['png','jpg','jpeg','webp','PNG','JPG','JPEG','WEBP']; // the page tries each one
 
-/* 20 sweater slots: rename them here whenever you want, e.g. [1,'Essentials Sweater'] */
+/* 20 sweater slots, labeled S1 to S20 (rename here whenever you want) */
 const SWEATERS = [
-  [1,'Sweater 1'], [2,'Sweater 2'], [3,'Sweater 3'], [4,'Sweater 4'],
-  [5,'Sweater 5'], [6,'Sweater 6'], [7,'Sweater 7'], [8,'Sweater 8'],
-  [9,'Sweater 9'], [10,'Sweater 10'], [11,'Sweater 11'], [12,'Sweater 12'],
-  [13,'Sweater 13'], [14,'Sweater 14'], [15,'Sweater 15'], [16,'Sweater 16'],
-  [17,'Sweater 17'], [18,'Sweater 18'], [19,'Sweater 19'], [20,'Sweater 20']
+  [1,'Ralph Lauren Zip'], [2,'Bubbery Zip'], [3,'Essentials Black Hoodie'], [4,'Essentials White Hoodie'],
+  [5,'Essentials Brown Hoodie'], [6,'Represent Hoodie'], [7,'Corteiz Hoodie'], [8,'Stone Island Zip'],
+  [9,'Gallery Dept Hoodie'], [10,'Chrome Hearts Zip'], [11,'Amiri Hoodie'], [12,'Stussy Hoodie'],
+  [13,'Supreme Hoodie'], [14,'Fear of God Hoodie'], [15,'Sp5der Hoodie'], [16,'Trapstar Hoodie'],
+  [17,'Palm Angels Hoodie'], [18,'Nike Tech Fleece Zip'], [19,'BAPE Shark Hoodie'], [20,'Balenciaga Hoodie']
 ];
 const SETS = [
   [1,'Essentials Set'], [2,'Corteiz Set'], [3,'Nike Tech Fleece Set'], [4,'Represent Set'],
@@ -183,11 +183,21 @@ const SETS = [
   [25,'Vlone Set'], [26,'Lacoste Set'], [27,'New Balance Set'], [28,'Under Armor Set'],
   [29,'SYNA Set'], [30,'Nike Set'], [31,'R Culture Plain Set']
 ];
-/* sweaters first, then sets */
+/* 20 coat slots, labeled C1 to C20 */
+const COATS = [
+  [1,'Ralph Lauren Puffer'], [2,'Bubbery Trench Coat'], [3,'Essentials Puffer'], [4,'Represent Jacket'],
+  [5,'Corteiz Puffer'], [6,'Stone Island Jacket'], [7,'Moncler Puffer'], [8,'Canada Goose Parka'],
+  [9,'The North Face Puffer'], [10,'Carhartt Jacket'], [11,'Amiri Leather Jacket'], [12,'Chrome Hearts Leather Jacket'],
+  [13,'Gallery Dept Varsity Jacket'], [14,'Supreme Puffer'], [15,'Fear of God Coat'], [16,'Palm Angels Track Jacket'],
+  [17,'Trapstar Puffer'], [18,'Balenciaga Puffer'], [19,'Dior Coat'], [20,'Louis Vuitton Jacket']
+];
+/* order on the page: sweaters, then sets, then coats */
 const ITEMS = [
   ...SWEATERS.map(([id,name]) => ({cat:'sweaters', id, name})),
-  ...SETS.map(([id,name]) => ({cat:'sets', id, name}))
+  ...SETS.map(([id,name]) => ({cat:'sets', id, name})),
+  ...COATS.map(([id,name]) => ({cat:'coats', id, name}))
 ];
+const PREFIX = {sweaters:'S', sets:'#', coats:'C'};
 
 function nextExt(img){
   const n = +img.dataset.try + 1;
@@ -195,12 +205,12 @@ function nextExt(img){
   else img.style.display = 'none';
 }
 const grid = document.getElementById('grid');
-const HEADS = {sweaters:'Sweaters', sets:'Sets'};
+const HEADS = {sweaters:'Sweaters', sets:'Sets', coats:'Coats'};
 function card({cat,id,name}){ return `
-  <article class="card" data-cat="${cat}" data-name="${name.toLowerCase()} ${cat} ${id}">
+  <article class="card" data-cat="${cat}" data-name="${name.toLowerCase()} ${cat} ${id} ${PREFIX[cat].replace('#','')}${id}">
     <div class="pic">
       <img src="${IMG_DIR}${cat}/${id}.${EXTS[0]}" data-cat="${cat}" data-id="${id}" data-try="0" alt="${name}" loading="lazy" onerror="nextExt(this)" onload="this.style.display='block'">
-      <span class="no">#${cat === 'sweaters' ? 'SW' : ''}${id}</span>
+      <span class="no">${PREFIX[cat]}${id}</span>
     </div>
     <div class="info"><b>${name}</b><span class="pr"><b>₪${PRICE}</b></span></div>
     <div class="buy">
@@ -211,8 +221,8 @@ function card({cat,id,name}){ return `
       <button class="add" data-cat="${cat}" data-id="${id}">Add to cart</button>
     </div>
   </article>`; }
-/* SWEATERS first, then SETS, each with its own heading */
-grid.innerHTML = ['sweaters','sets'].map(c => {
+/* SWEATERS, SETS, COATS, each with its own heading */
+grid.innerHTML = ['sweaters','sets','coats'].map(c => {
   const list = ITEMS.filter(i => i.cat === c);
   return `<h2 class="cat-head" data-head="${c}">${HEADS[c]}<em>${list.length} items</em></h2>` + list.map(card).join('');
 }).join('');
