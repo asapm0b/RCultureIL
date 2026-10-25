@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sets | R CULTURE IL</title>
+<title>Winter | R CULTURE IL</title>
 <link rel="icon" type="image/png" href="favicon.png?v=2">
 <link rel="shortcut icon" href="favicon.png?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -73,6 +73,11 @@ nav a:hover::after,nav a.on::after{width:100%}
 .add{flex:1;height:32px;padding:0;border:1.5px solid var(--ink);background:transparent;color:var(--ink);font:inherit;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:background .25s,color .25s}
 .add:hover,.add:focus-visible{background:var(--ink);color:#fff}
 .add.done{background:var(--ink);color:#fff}
+.filters{max-width:1200px;margin:0 auto;padding:20px 24px 0;display:flex;gap:8px;flex-wrap:wrap}
+.chip{height:36px;padding:0 20px;border:1.5px solid var(--ink);background:#fff;color:var(--ink);font:inherit;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;border-radius:0;transition:background .2s,color .2s}
+.chip:hover{background:#f2f2f2}
+.chip.on,.chip.on:hover{background:var(--ink);color:#fff}
+.chip small{font-size:10px;opacity:.6;margin-left:6px;letter-spacing:.05em}
 .cat-head{grid-column:1/-1;display:flex;align-items:baseline;gap:12px;margin:24px 0 0;padding-bottom:12px;border-bottom:1px solid var(--line);font-family:var(--display);font-weight:400;font-size:clamp(32px,5vw,56px);line-height:1;letter-spacing:.03em;text-transform:uppercase}
 .cat-head:first-child{margin-top:0}
 .cat-head em{font-family:var(--body);font-style:normal;font-size:13px;letter-spacing:.1em;color:var(--muted)}
@@ -95,6 +100,7 @@ footer{border-top:1px solid var(--line);padding:56px 24px 40px}
   .logo{font-size:18px}
   .search,.search:focus-within{width:90px}
   .title{padding:40px 20px 8px}
+  .filters{padding:16px 20px 0}
   .products{padding:24px 20px 64px}
   .grid{gap:22px 12px}
   .info{font-size:13px}
@@ -133,9 +139,16 @@ footer{border-top:1px solid var(--line);padding:56px 24px 40px}
 </header>
 
 <section class="title">
-  <h1>Sets<em>סטים</em></h1>
+  <h1>Winter<em>חורף</em></h1>
   <p><span id="total">71</span> items · ₪229 each</p>
 </section>
+
+<div class="filters" id="filters">
+  <button class="chip on" data-cat="all">All</button>
+  <button class="chip" data-cat="sweaters">Sweaters</button>
+  <button class="chip" data-cat="sets">Sets</button>
+  <button class="chip" data-cat="coats">Coats</button>
+</div>
 
 <!-- IMAGES: sweaters/1.png to 20.png, sets/1.png to 31.png, coats/1.png to 20.png (800 x 800 px) -->
 <section class="products">
@@ -247,12 +260,13 @@ grid.addEventListener('click', e => {
 grid.addEventListener('change', e => { if(e.target.classList.contains('size')) e.target.classList.remove('err'); });
 updateCount();
 
-/* live search */
+/* live search + category buttons */
 const q = document.getElementById('q');
+let activeCat = 'all';
 function filter(){
   const v = q.value.trim().toLowerCase(); let n = 0;
   grid.querySelectorAll('.card').forEach(c => {
-    const show = !v || c.dataset.name.includes(v);
+    const show = (activeCat === 'all' || c.dataset.cat === activeCat) && (!v || c.dataset.name.includes(v));
     c.style.display = show ? '' : 'none'; if(show) n++;
   });
   grid.querySelectorAll('.cat-head').forEach(h => {
@@ -262,6 +276,12 @@ function filter(){
   document.getElementById('total').textContent = n;
   document.getElementById('empty').style.display = n ? 'none' : 'block';
 }
+document.getElementById('filters').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if(!b) return;
+  activeCat = b.dataset.cat;
+  document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c === b));
+  filter();
+});
 q.addEventListener('input', filter);
 document.getElementById('searchForm').addEventListener('submit', e => { e.preventDefault(); filter(); });
 </script>
