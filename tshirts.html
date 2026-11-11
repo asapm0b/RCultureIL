@@ -53,12 +53,14 @@ nav a:hover::after,nav a.on::after{width:100%}
 .products{max-width:1200px;margin:0 auto;padding:32px 24px 96px}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px 16px}
 .card{display:flex;flex-direction:column}
-.pic{position:relative;aspect-ratio:1/1;background:#f2f2f2;overflow:hidden}
+.pic{position:relative;aspect-ratio:1/1;background:#f2f2f2;overflow:hidden;cursor:pointer}
 .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s}
 .card:hover .pic img{transform:scale(1.06)}
 .pic .no{position:absolute;top:12px;left:14px;font-size:11px;letter-spacing:.12em;color:var(--muted);font-weight:600}
 .info{display:flex;justify-content:space-between;gap:12px;margin-top:12px;font-size:14px}
 .info b{font-weight:600}
+.info > b{cursor:pointer}
+.info > b:hover{text-decoration:underline}
 .info .pr{display:flex;align-items:center;gap:6px;white-space:nowrap}
 .pr s{color:var(--muted);font-size:12px;font-weight:400}
 .pr b{font-weight:600}
@@ -73,6 +75,56 @@ nav a:hover::after,nav a.on::after{width:100%}
 .add.done{background:var(--ink);color:#fff}
 .empty{display:none;text-align:center;color:var(--muted);padding:64px 0;font-size:14px}
 
+/* product view (looks like a page, but it's the same file) */
+.pv{position:fixed;inset:0;background:var(--bg);z-index:100;display:none;overflow:auto;-webkit-overflow-scrolling:touch}
+.pv.on{display:block}
+.pv-bar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.pv-bar .bar{max-width:1200px}
+.pv-back{white-space:nowrap;flex:0 0 auto;background:none;border:0;font:inherit;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;color:var(--ink);padding:0}
+.pv-back:hover{text-decoration:underline}
+.pv-main{max-width:1200px;margin:0 auto;padding:32px 24px 72px;display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:start}
+.pv-pic{position:relative;aspect-ratio:1/1;background:#f2f2f2;overflow:hidden}
+.pv-pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pv-pic .no{position:absolute;top:16px;left:18px;font-size:11px;letter-spacing:.12em;color:var(--muted);font-weight:600}
+.pv-pic .sale{position:absolute;top:14px;right:14px;background:#16a34a;color:#fff;font-size:10px;font-weight:600;letter-spacing:.12em;padding:4px 8px;text-transform:uppercase}
+.pv-info{display:flex;flex-direction:column;gap:20px;position:sticky;top:88px}
+.crumb{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.crumb a:hover{text-decoration:underline;color:var(--ink)}
+.pv-info h1{font-family:var(--display);font-weight:400;font-size:clamp(40px,6vw,72px);line-height:.95;letter-spacing:.02em;text-transform:uppercase;margin:0}
+.pv-price{display:flex;align-items:center;gap:10px;font-size:24px}
+.pv-price s{color:var(--muted);font-size:16px}
+.pv-price b{font-weight:600}
+.pv-price .tag{background:#16a34a;color:#fff;font-size:10px;font-weight:600;letter-spacing:.12em;padding:4px 8px;text-transform:uppercase}
+.pv-desc{margin:0;font-size:14px;line-height:1.7;color:var(--muted)}
+.pv-label{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+.pv-sizes{display:flex;gap:8px;flex-wrap:wrap}
+.pv-sizes button{min-width:56px;height:46px;border:1.5px solid var(--ink);background:#fff;color:var(--ink);font:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s,color .2s}
+.pv-sizes button:hover{background:#f2f2f2}
+.pv-sizes button.sel{background:var(--ink);color:#fff}
+.pv-sizes.err button{border-color:#dc2626;color:#dc2626}
+.pv-sizes.err button.sel{background:#dc2626;color:#fff}
+.pv-colors{display:flex;gap:12px;flex-wrap:wrap}
+.pv-colors button{width:38px;height:38px;border-radius:50%;border:1.5px solid #c9c9c9;cursor:pointer;padding:0;box-shadow:inset 0 0 0 3px #fff;transition:border-color .2s,transform .2s}
+.pv-colors button:hover{transform:scale(1.08)}
+.pv-colors button.sel{border-color:var(--ink);border-width:2px}
+.pv-colors.err button{border-color:#dc2626}
+.pv-add{height:56px;border:1.5px solid var(--ink);background:var(--ink);color:#fff;font:inherit;font-size:13px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:background .25s,color .25s}
+.pv-add:hover{background:#fff;color:var(--ink)}
+.pv-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.pv-list li{display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--line);font-size:13px}
+.pv-list li span:first-child{font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:12px}
+.pv-list li span:last-child{color:var(--muted);text-align:right}
+.pv-nav{display:flex;justify-content:space-between;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.pv-nav button{background:none;border:0;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;color:var(--muted);padding:0}
+.pv-nav button:hover{color:var(--ink)}
+.pv-more{max-width:1200px;margin:0 auto;padding:0 24px 80px}
+.pv-more h2{font-family:var(--display);font-weight:400;font-size:34px;letter-spacing:.05em;text-transform:uppercase;margin:0 0 24px;padding-top:40px;border-top:1px solid var(--line)}
+.pv-more .grid{gap:20px 16px}
+.rel{cursor:pointer}
+.rel .pic{cursor:pointer}
+.rel .info{margin-top:10px}
+.pv-foot{border-top:1px solid var(--line);padding:28px 24px;text-align:center;font-size:12px;color:var(--muted)}
+
 footer{border-top:1px solid var(--line);padding:56px 24px 40px}
 .foot{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;gap:32px}
 .foot .logo{font-size:26px}
@@ -82,9 +134,17 @@ footer{border-top:1px solid var(--line);padding:56px 24px 40px}
 .copy{max-width:1200px;margin:40px auto 0;font-size:12px;color:var(--muted)}
 
 @media(max-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .pv-main{grid-template-columns:1fr;gap:24px;padding:16px 20px 48px}
+  .pv-info{position:static}
+  .pv-more{padding:0 20px 56px}
+  .pv-more .grid{grid-template-columns:repeat(2,1fr)}
+}
 @media(max-width:640px){
   nav{display:none}
+  .pv-back-long{display:none}
+  .pv-back{font-size:12px}
   .bar{padding:12px 16px;gap:10px}
   .left,.right{gap:10px}
   .logo{font-size:18px}
@@ -138,6 +198,63 @@ footer{border-top:1px solid var(--line);padding:56px 24px 40px}
   <div class="empty" id="empty">No T-shirts match your search.</div>
 </section>
 
+<!-- Product page view (same file, no extra pages) -->
+<div class="pv" id="pv" aria-hidden="true">
+  <div class="pv-bar">
+    <div class="bar">
+      <div class="left">
+        <a class="logo" href="index.html">R CULTURE IL</a>
+      </div>
+      <button class="pv-back" id="pvBack" type="button">← Back<span class="pv-back-long"> to T-Shirts</span></button>
+      <div class="right">
+        <a class="cart" href="log.html">LOGIN</a>
+        <a class="cart-btn" href="cart.html" aria-label="Cart">
+          <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+          <span class="cart-count">0</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="pv-main">
+    <div class="pv-pic">
+      <img id="pvImg" alt="" data-try="0" onerror="nextExt(this)" onload="this.style.display='block'">
+      <span class="no" id="pvNo"></span>
+      <span class="sale">Sale</span>
+    </div>
+    <div class="pv-info">
+      <div class="crumb"><a href="index.html">Home</a> / <a href="#" id="pvCrumbCat">T-Shirts</a> / <span id="pvCrumb"></span></div>
+      <h1 id="pvName"></h1>
+      <div class="pv-price"><s>₪105</s><b id="pvPrice"></b><span class="tag">Sale</span></div>
+      <p class="pv-desc">Premium quality streetwear tee in an oversized fit. Soft heavyweight cotton, clean print, built to last wash after wash.</p>
+      <div id="pvColorWrap" hidden>
+        <div class="pv-label">Color: <span id="pvColorName" style="font-weight:400;color:var(--muted)"></span></div>
+        <div class="pv-colors" id="pvColors"></div>
+      </div>
+      <div>
+        <div class="pv-label">Select size</div>
+        <div class="pv-sizes" id="pvSizes"></div>
+      </div>
+      <button class="pv-add" id="pvAdd" type="button">Add to cart</button>
+      <ul class="pv-list">
+        <li><span>Shipping</span><span>Free over ₪350</span></li>
+        <li><span>Delivery</span><span>All over Israel</span></li>
+        <li><span>Quality</span><span>Best quality</span></li>
+      </ul>
+      <div class="pv-nav">
+        <button id="pvPrev" type="button">← Previous</button>
+        <button id="pvNext" type="button">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pv-more">
+    <h2>You may also like</h2>
+    <div class="grid" id="pvMore"></div>
+  </div>
+  <div class="pv-foot">R Culture IL® 2026</div>
+</div>
+
 <footer>
   <div class="foot">
     <div>
@@ -172,6 +289,57 @@ const TEES = [
   [95,'Acne Studios Tee'],[96,'Versace Tee']
 ];
 
+/* COLOR OPTIONS — basic palette; each tee picks its own colors in TEE_COLORS below.
+   Each color's photo is saved as tees/<id>-<key>.png, e.g. tees/63-black.png, tees/63-white.png
+   If a color photo doesn't exist yet, the main photo (tees/63.png) stays on screen.
+   To add or remove a color, edit this list. */
+const BASIC = [
+  {key:'black', name:'Black', hex:'#111111'},
+  {key:'white', name:'White', hex:'#ffffff'},
+  {key:'grey',  name:'Grey',  hex:'#8a8a8a'},
+  {key:'navy',  name:'Navy',  hex:'#1b2a49'},
+  {key:'red',   name:'Red',   hex:'#c8102e'}
+];
+/* which colors each tee comes in (2 to 5). Edit freely: id: ['black','white',...] */
+const TEE_COLORS = {
+  63:['black','white','grey','navy','red'],      /* Ralph Lauren */
+  64:['black','white','grey'],                    /* Corteiz */
+  65:['black','white'], 66:['black','white'], 67:['black','white'],
+  68:['black','white','grey','navy'],             /* Essentials */
+  69:['black','white','grey','navy'],             /* Represent */
+  70:['black','white','navy','grey'],             /* Stone Island */
+  71:['black','white','grey'],                    /* HellStar */
+  72:['black','white','grey','navy','red'],       /* BAPE */
+  73:['black','white'], 74:['black','white'],     /* Balenciaga */
+  75:['black','white','grey'],                    /* Gallery Dept */
+  76:['black','white'],                           /* Chrome Hearts */
+  77:['black','white','navy','red'],              /* Ami Paris */
+  78:['black','white','grey','navy','red'],       /* PLAY */
+  79:['black','white','grey','navy','red'],       /* Stussy */
+  80:['black','white'],                           /* Louis Vuitton */
+  81:['black','white','grey','navy','red'],       /* Nike */
+  82:['black','white'],                           /* Palm Angels */
+  83:['black','white'],                           /* Dior */
+  84:['black','white','grey'],                    /* Travis Scott */
+  85:['black','white'],                           /* Vlone */
+  86:['black','white','grey'],                    /* Fear of God */
+  87:['black','white'],                           /* Sp5der */
+  88:['black','white','grey','navy','red'],       /* Supreme */
+  89:['black','white'],                           /* Off-White */
+  90:['black','white','grey','navy','red'],       /* R Culture Plain */
+  91:['black','white'],                           /* Denim Tears */
+  92:['black','white','grey','navy'],             /* New Balance */
+  93:['black','white','grey','navy','red'],       /* Lacoste */
+  94:['black','white'],                           /* Balenciaga */
+  95:['black','white','grey'],                    /* Acne Studios */
+  96:['black','white']                            /* Versace */
+};
+const COLORS = {};
+TEES.forEach(([id]) => {
+  const keys = TEE_COLORS[id] || ['black','white'];
+  COLORS[id] = keys.map(k => { const c = BASIC.find(x => x.key === k); return {name:c.name, hex:c.hex, img:id + '-' + k}; });
+});
+
 function nextExt(img){
   const n = +img.dataset.try + 1;
   if(n < EXTS.length){ img.dataset.try = n; img.src = `${IMG_DIR}tees/${img.dataset.id}.${EXTS[n]}`; }
@@ -179,7 +347,7 @@ function nextExt(img){
 }
 const grid = document.getElementById('grid');
 grid.innerHTML = TEES.map(([id,name]) => `
-  <article class="card" data-name="${name.toLowerCase()} ${id}">
+  <article class="card" data-id="${id}" data-name="${name.toLowerCase()} ${id}">
     <div class="pic">
       <img src="${IMG_DIR}tees/${id}.${EXTS[0]}" data-id="${id}" data-try="0" alt="${name}" loading="lazy" onerror="nextExt(this)" onload="this.style.display='block'">
       <span class="no">#${id}</span>
@@ -198,20 +366,161 @@ grid.innerHTML = TEES.map(([id,name]) => `
 /* cart (saved in the browser) */
 function getCart(){ try{ return JSON.parse(localStorage.getItem('rc_cart')) || []; }catch(e){ return []; } }
 function saveCart(c){ try{ localStorage.setItem('rc_cart', JSON.stringify(c)); }catch(e){} }
-function updateCount(){ document.getElementById('cartCount').textContent = getCart().reduce((n,i)=>n+i.qty,0); }
-grid.addEventListener('click', e => {
-  const b = e.target.closest('.add'); if(!b) return;
-  const sel = b.parentElement.querySelector('.size');
-  if(!sel.value){ sel.classList.add('err'); sel.focus(); return; }
-  const id = +b.dataset.id, size = sel.value, t = TEES.find(x => x[0] === id), cart = getCart();
-  const row = cart.find(i => i.id === id && i.size === size);
-  row ? row.qty++ : cart.push({id, name:t[1], size, price:PRICE, qty:1});
+function updateCount(){ const n = getCart().reduce((n,i)=>n+i.qty,0); document.querySelectorAll('.cart-count').forEach(el => el.textContent = n); }
+function addToCart(id, size, color = ''){
+  const t = TEES.find(x => x[0] === id), cart = getCart();
+  const row = cart.find(i => i.id === id && i.size === size && (i.color || '') === color);
+  row ? row.qty++ : cart.push({id, name:t[1].replace(/\s+/g,' ') + (color ? ' – ' + color : ''), color, size, price:PRICE, qty:1});
   saveCart(cart); updateCount();
-  b.textContent = 'Added ✓'; b.classList.add('done');
-  setTimeout(() => { b.textContent = 'Add to cart'; b.classList.remove('done'); }, 1200);
+}
+grid.addEventListener('click', e => {
+  const b = e.target.closest('.add');
+  if(b){
+    if(COLORS[+b.dataset.id]){ openProduct(+b.dataset.id); return; } /* has color options: choose on the product page */
+    const sel = b.parentElement.querySelector('.size');
+    if(!sel.value){ sel.classList.add('err'); sel.focus(); return; }
+    addToCart(+b.dataset.id, sel.value);
+    b.textContent = 'Added ✓'; b.classList.add('done');
+    setTimeout(() => { b.textContent = 'Add to cart'; b.classList.remove('done'); }, 1200);
+    return;
+  }
+  /* click picture or name -> open popup */
+  const open = e.target.closest('.pic, .info > b');
+  if(open){ openProduct(+open.closest('.card').dataset.id); }
 });
 grid.addEventListener('change', e => { if(e.target.classList.contains('size')) e.target.classList.remove('err'); });
 updateCount();
+
+/* product view — same file, looks like its own page. Link format: tshirts.html#p63 */
+const pv = document.getElementById('pv');
+const pvSizes = document.getElementById('pvSizes');
+let curId = null, curSize = '', curColor = '', openedByClick = false;
+pvSizes.innerHTML = SIZES.map(z => `<button type="button" data-z="${z}">${z}</button>`).join('');
+function pickColor(i){
+  const c = (COLORS[curId] || [])[i]; if(!c) return;
+  curColor = c.name;
+  document.getElementById('pvColorName').textContent = c.name;
+  const box = document.getElementById('pvColors');
+  box.classList.remove('err');
+  box.querySelectorAll('button').forEach((b,k) => b.classList.toggle('sel', k === i));
+  if(c.img){
+    const want = c.name, main = curId;
+    tryImg(c.img, 0, src => {
+      if(curColor !== want) return; /* user already picked another color */
+      const img = document.getElementById('pvImg');
+      img.style.display = 'block'; img.dataset.try = 0;
+      if(src){ img.dataset.id = c.img; img.src = src; }
+      else { img.dataset.id = main; img.src = `${IMG_DIR}tees/${main}.${EXTS[0]}`; } /* no photo for this color yet: keep main photo */
+    });
+  }
+}
+function tryImg(file, k, cb){
+  const im = new Image();
+  im.onload = () => cb(im.src);
+  im.onerror = () => { k + 1 < EXTS.length ? tryImg(file, k + 1, cb) : cb(null); };
+  im.src = `${IMG_DIR}tees/${file}.${EXTS[k]}`;
+}
+document.getElementById('pvColors').addEventListener('click', e => {
+  const b = e.target.closest('button'); if(b) pickColor(+b.dataset.i);
+});
+const clean = n => n.replace(/\s+/g,' ');
+
+function visibleIds(){
+  return [...grid.querySelectorAll('.card')].filter(c => c.style.display !== 'none').map(c => +c.dataset.id);
+}
+function showProduct(id){
+  const idx = TEES.findIndex(x => x[0] === id); if(idx < 0) return hideProduct();
+  const name = clean(TEES[idx][1]);
+  curId = id; curSize = '';
+  document.getElementById('pvName').textContent = name;
+  document.getElementById('pvCrumb').textContent = name;
+  document.getElementById('pvNo').textContent = '#' + id;
+  document.getElementById('pvPrice').textContent = '₪' + PRICE;
+  document.title = name + ' | R CULTURE IL';
+  const img = document.getElementById('pvImg');
+  img.style.display = 'block'; img.dataset.id = id; img.dataset.try = 0; img.alt = name;
+  img.src = `${IMG_DIR}tees/${id}.${EXTS[0]}`;
+  pvSizes.classList.remove('err');
+  pvSizes.querySelectorAll('button').forEach(b => b.classList.remove('sel'));
+  /* color options (only shown for products listed in COLORS) */
+  const cols = COLORS[id] || [];
+  curColor = '';
+  document.getElementById('pvColorWrap').hidden = !cols.length;
+  document.getElementById('pvColorName').textContent = '';
+  const cbox = document.getElementById('pvColors');
+  cbox.classList.remove('err');
+  cbox.innerHTML = cols.map((c,i) => `<button type="button" data-i="${i}" title="${c.name}" aria-label="${c.name}" style="background:${c.hex}"></button>`).join('');
+  if(cols.length === 1) pickColor(0);
+  /* "you may also like": next 4 products */
+  let more = '';
+  for(let k = 1; k <= 4; k++){
+    const [rid, rname] = TEES[(idx + k) % TEES.length];
+    more += `<article class="card rel" data-id="${rid}">
+      <div class="pic"><img src="${IMG_DIR}tees/${rid}.${EXTS[0]}" data-id="${rid}" data-try="0" alt="${clean(rname)}" loading="lazy" onerror="nextExt(this)" onload="this.style.display='block'"><span class="no">#${rid}</span></div>
+      <div class="info"><b>${clean(rname)}</b><span class="pr"><s>₪${OLD_PRICE}</s><b>₪${PRICE}</b></span></div>
+    </article>`;
+  }
+  document.getElementById('pvMore').innerHTML = more;
+  pv.classList.add('on'); pv.setAttribute('aria-hidden','false'); pv.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+function hideProduct(){
+  pv.classList.remove('on'); pv.setAttribute('aria-hidden','true');
+  document.body.style.overflow = ''; document.title = 'T-Shirts | R CULTURE IL'; curId = null;
+}
+function syncFromHash(){
+  const m = location.hash.match(/^#p(\d+)$/);
+  m ? showProduct(+m[1]) : hideProduct();
+}
+function openProduct(id){ openedByClick = true; location.hash = 'p' + id; }
+function forceClose(){
+  history.replaceState(null, '', location.pathname + location.search);
+  hideProduct();
+}
+function closeProduct(){
+  const viaHistory = openedByClick;
+  openedByClick = false;
+  if(viaHistory){
+    history.back();
+    /* some phone browsers ignore history.back() on hash changes: make sure it closes anyway */
+    setTimeout(() => { if(pv.classList.contains('on')) forceClose(); }, 250);
+  } else forceClose();
+}
+function goTo(id){ history.replaceState(null, '', '#p' + id); showProduct(id); }
+function step(d){
+  const ids = visibleIds(); if(!ids.length) return;
+  let i = ids.indexOf(curId); if(i < 0) i = 0;
+  goTo(ids[(i + d + ids.length) % ids.length]);
+}
+pvSizes.addEventListener('click', e => {
+  const b = e.target.closest('button'); if(!b) return;
+  curSize = b.dataset.z; pvSizes.classList.remove('err');
+  pvSizes.querySelectorAll('button').forEach(x => x.classList.toggle('sel', x === b));
+});
+document.getElementById('pvAdd').addEventListener('click', e => {
+  if((COLORS[curId] || []).length && !curColor){
+    const cb = document.getElementById('pvColors'); cb.classList.add('err'); cb.scrollIntoView({block:'center',behavior:'smooth'}); return;
+  }
+  if(!curSize){ pvSizes.classList.add('err'); pvSizes.scrollIntoView({block:'center',behavior:'smooth'}); return; }
+  addToCart(curId, curSize, curColor);
+  const b = e.currentTarget; b.textContent = 'Added ✓';
+  setTimeout(() => { b.textContent = 'Add to cart'; }, 1200);
+});
+document.getElementById('pvMore').addEventListener('click', e => {
+  const c = e.target.closest('.rel'); if(c) goTo(+c.dataset.id);
+});
+document.getElementById('pvBack').addEventListener('click', closeProduct);
+document.getElementById('pvCrumbCat').addEventListener('click', e => { e.preventDefault(); closeProduct(); });
+document.getElementById('pvPrev').addEventListener('click', () => step(-1));
+document.getElementById('pvNext').addEventListener('click', () => step(1));
+document.addEventListener('keydown', e => {
+  if(!pv.classList.contains('on')) return;
+  if(e.key === 'Escape') closeProduct();
+  if(e.key === 'ArrowLeft') step(-1);
+  if(e.key === 'ArrowRight') step(1);
+});
+window.addEventListener('hashchange', syncFromHash);
+syncFromHash();
 
 /* live search */
 const q = document.getElementById('q');
